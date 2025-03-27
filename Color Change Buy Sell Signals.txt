@@ -1,0 +1,44 @@
+
+//@version=5
+// Created by SpiritMaker79
+indicator("Color Change Buy Sell Signals", overlay=true)
+
+// Input parameters
+ema30Length = input(30, title="30 EMA Length")
+ema50Length = input(50, title="50 EMA Length")
+
+// Calculate EMAs
+ema30 = ta.ema(close, ema30Length)
+ema50 = ta.ema(close, ema50Length)
+
+// Track previous color of EMAs (store previous color states)
+var color prevEma30Color = na
+var color prevEma50Color = na
+
+// Define current colors based on EMA comparison
+ema30Color = ema30 > ema50 ? color.green : color.red
+ema50Color = ema30 > ema50 ? color.green : color.red
+
+// Buy and Sell Conditions based on color change
+buySignal = (ema30Color == color.green and prevEma30Color == color.red) and (ema50Color == color.green and prevEma50Color == color.red)
+sellSignal = (ema30Color == color.red and prevEma30Color == color.green) and (ema50Color == color.red and prevEma50Color == color.green)
+
+// Define the distance from the candles for placing signals
+buySignalOffset = 1000  // Slight vertical offset for Buy signal
+sellSignalOffset = 0.10 // Slight vertical offset for Sell signal
+
+// Plot the Buy and Sell signals with a vertical distance from candles
+plotshape(buySignal, title="Buy Signal", location=location.belowbar, color=color.green, style=shape.labelup, text="BUY", offset=-0)
+plotshape(sellSignal, title="Sell Signal", location=location.abovebar, color=color.red, style=shape.labeldown, text="SELL", offset=0)
+
+// Store the current color for the next bar
+prevEma30Color := ema30Color
+prevEma50Color := ema50Color
+
+// Plot the EMAs with dynamic color
+plot(ema30, title="30 EMA", color=ema30Color, linewidth=2)
+plot(ema50, title="50 EMA", color=ema50Color, linewidth=2)
+
+// Alerts for Buy and Sell signals
+alertcondition(buySignal, title="Buy Signal Alert", message="30 EMA and 50 EMA changed to green. Buy signal triggered!")
+alertcondition(sellSignal, title="Sell Signal Alert", message="30 EMA and 50 EMA changed to red. Sell signal triggered!")

@@ -1,0 +1,67 @@
+//@version=6
+// Created by SpirtMaker79
+indicator('MA-MACD Combo', overlay = true)
+
+// Check if current time frame is 1 minute
+if timeframe.period != '1'
+    runtime.error("This indicator is designed to work only on the 1-minute time frame")
+
+// Input for label customization
+labelSize = input.string(defval = 'normal', title = 'Label Size', options = ['tiny', 'small', 'normal', 'large', 'huge'])
+labelTextColorLong = input.color(color.black, title = 'Long Entry Text Color')
+labelTextColorShort = input.color(color.white, title = 'Short Entry Text Color')
+labelColorLong = input.color(color.green, title = 'Long Entry Label Color')
+labelColorShort = input.color(color.red, title = 'Short Entry Label Color')
+labelStyleLong = input.string(defval = 'label.style_label_down', title = 'Long Entry Label Style', options = ['label.style_label_down', 'label.style_label_up', 'label.style_label_left', 'label.style_label_right', 'label.style_label_center'])
+labelStyleShort = input.string(defval = 'label.style_label_up', title = 'Short Entry Label Style', options = ['label.style_label_down', 'label.style_label_up', 'label.style_label_left', 'label.style_label_right', 'label.style_label_center'])
+
+// Fetch 5-minute MACD data on the 1-minute chart
+[macdLine_5m, signalLine_5m, _] = request.security(syminfo.tickerid, '5', ta.macd(close, 12, 26, 9))
+
+// Detect MACD trend direction (bullish or bearish)
+macdBullish = macdLine_5m > signalLine_5m
+macdBearish = macdLine_5m < signalLine_5m
+
+// Calculate moving averages on the 1-minute chart
+ma21 = ta.sma(close, 21)
+ma200 = ta.sma(close, 200)
+
+// Plot moving averages
+plot(ma21, color = color.yellow, title = '21MA')
+plot(ma200, color = color.purple, title = '200MA')
+
+// Helper function to convert string to label style
+getLabelStyle(styleStr) =>
+    switch styleStr
+        'label.style_label_down' => label.style_label_down
+        'label.style_label_up' => label.style_label_up
+        'label.style_label_left' => label.style_label_left
+        'label.style_label_right' => label.style_label_right
+        'label.style_label_center' => label.style_label_center
+        => label.style_label_down // Default case
+
+// Helper function to convert string to size
+getLabelSize(sizeStr) =>
+    switch sizeStr
+        'tiny' => size.tiny
+        'small' => size.small
+        'normal' => size.normal
+        'large' => size.large
+        'huge' => size.huge
+        => size.normal // Default case
+
+// Long Entry Signal: 21MA crosses above 200MA AND 5M MACD is bullish
+longCondition = ta.crossover(ma21, ma200) and macdBullish
+if longCondition
+    label.new(bar_index, low, text = 'Long Entry', color = labelColorLong, style = getLabelStyle(labelStyleLong), textcolor = labelTextColorLong, size = getLabelSize(labelSize))
+
+// Short Entry Signal: 21MA crosses below 200MA AND 5M MACD is bearish
+shortCondition = ta.crossunder(ma21, ma200) and macdBearish
+if shortCondition
+    label.new(bar_index, high, text = 'Short Entry', color = labelColorShort, style = getLabelStyle(labelStyleShort), textcolor = labelTextColorShort, size = getLabelSize(labelSize))
+
+// Optional: Plot MACD crossovers for reference (can remove if too cluttered)
+if ta.crossover(macdLine_5m, signalLine_5m)
+    label.new(bar_index, high, text = 'MACD Up', color = color.green, style = label.style_label_down, textcolor = color.black)
+if ta.crossunder(macdLine_5m, signalLine_5m)
+    label.new(bar_index, low, text = 'MACD Down', color = color.red, style = label.style_label_up, textcolor = color.white)
