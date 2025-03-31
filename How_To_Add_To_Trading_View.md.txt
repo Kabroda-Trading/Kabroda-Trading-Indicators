@@ -1,0 +1,52 @@
+Step 1: Get the Code from GitHub
+Open this GitHub repository: [e.g., https://github.com/Kabroda-Trading/Kabroda-Trading-Indicators].
+
+Browse the list of .txt files—each one is a custom indicator I’ve created.
+
+Click on the file you want to use (e.g., any .pine file in the repo).
+
+Click the “Raw” button (top-right) to see the plain code.
+
+Click the “Copy raw file” icon (or highlight all with Ctrl+A and copy with Ctrl+C) to copy the full script to your clipboard.
+
+Step 2: Open Pine Editor in TradingView
+Go to TradingView (tradingview.com) and open any chart.
+
+At the bottom of the screen, click the “Pine Editor” tab to open the code editor.
+Don’t worry if there’s already code in there—it won’t affect this process.
+
+Step 3: Create a New Indicator
+In Pine Editor, click the dropdown menu (top-left, usually says “Untitled script” or another name).
+
+Select “New” > “Indicator” to start a fresh indicator script.
+If prompted to save changes to existing code, click “No” or clear the editor manually.
+
+Step 4: Paste the Code
+Highlight any default code in the editor (Ctrl+A) and delete it.
+
+Right-click in the editor and choose “Paste” (or Ctrl+V) to insert the copied GitHub code.
+If your browser asks permission to paste, click “Allow.”
+
+Step 5: Save the Indicator
+Click the “Save” button (top-right in Pine Editor).
+
+A name will appear automatically based on the script (e.g., the title I’ve coded into it).
+
+Press Enter or click “Save” again to confirm the name.
+
+Step 6: Add to Your Chart
+Click the “Add to Chart” button (next to “Save”).
+
+The indicator will load onto your chart—look for lines, labels, or signals depending on the script.
+Check the script’s details in the repo (e.g., README or file comments) for ideal timeframes or settings.
+
+Step 7: Repeat for Other Indicators
+Return to the GitHub repo.
+
+Pick another .txt file, copy its raw code (Step 1), and repeat Steps 2-6.
+
+Add as many indicators as you like—they’ll stay saved in your TradingView account.
+
+Done!
+Your custom indicators are now in TradingView under “Indicators” > “My Scripts,” ready to use anytime. No need to rely on TradingView’s public library—just grab my latest scripts from this repo and add them yourself. Questions? Hit me up via GitHub or the video comments!
+
